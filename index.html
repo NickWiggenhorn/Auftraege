@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baustoffaufträge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Baustoffaufträge</h1>
+        <div class="form-container">
+            <h2>Auftrag eintragen</h2>
+            <form id="auftragForm">
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="text" id="baustoff" placeholder="Baustoff" required>
+                <input type="text" id="lkw" placeholder="LKW" required>
+                <input type="text" id="adresse" placeholder="Adresse" required>
+                <input type="date" id="lieferdatum" placeholder="Lieferdatum" required>
+                <input type="text" id="kontakt" placeholder="Kontaktinformationen" required>
+                <textarea id="anweisungen" placeholder="Besondere Anweisungen"></textarea>
+                <select id="status" required>
+                    <option value="Eingegangen">Eingegangen</option>
+                    <option value="In Bearbeitung">In Bearbeitung</option>
+                    <option value="Abgeschlossen">Abgeschlossen</option>
+                </select>
+                <button type="submit">Auftrag hinzufügen</button>
+            </form>
+        </div>
+        <div class="auftraege-container">
+            <h2>Aufträge</h2>
+            <ul id="auftraegeList"></ul>
+        </div>
+    </div>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

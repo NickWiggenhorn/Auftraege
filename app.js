@@ -16,6 +16,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Globale Funktionen definieren
+window.deleteAuftrag = function(id) {
+    const auftragRef = ref(db, 'auftraege/' + id);
+    remove(auftragRef).then(() => {
+        console.log('Auftrag erfolgreich gelöscht');
+    }).catch((error) => {
+        console.error('Fehler beim Löschen des Auftrags:', error);
+    });
+};
+
+window.updateStatus = function(id, newStatus) {
+    update(ref(db, 'auftraege/' + id), { status: newStatus });
+};
+
 // Formular-Ereignislistener
 document.getElementById('auftragForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -41,12 +55,18 @@ document.getElementById('auftragForm').addEventListener('submit', function(event
     };
 
     // Auftrag zur Firebase-Datenbank hinzufügen
-    push(ref(db, 'auftraege'), auftrag);
+    const auftragRef = push(ref(db, 'auftraege'));
+    const auftragKey = auftragRef.key;
+    update(ref(db, 'auftraege/' + auftragKey), auftrag);
 
     clearForm();
 });
 
-function addAuftragToList(id, auftrag) {
+function clearForm() {
+    document.getElementById('auftragForm').reset();
+}
+
+function addAuftragToList(auftrag, id) {
     const auftraegeList = document.getElementById('auftraegeList');
     const listItem = document.createElement('li');
     listItem.setAttribute('data-id', id);
@@ -79,21 +99,9 @@ function loadAuftraege() {
         snapshot.forEach((childSnapshot) => {
             const id = childSnapshot.key;
             const auftrag = childSnapshot.val();
-            addAuftragToList(id, auftrag);
+            addAuftragToList(auftrag, id);
         });
     });
-}
-
-function deleteAuftrag(id) {
-    remove(ref(db, 'auftraege/' + id));
-}
-
-function updateStatus(id, newStatus) {
-    update(ref(db, 'auftraege/' + id), { status: newStatus });
-}
-
-function clearForm() {
-    document.getElementById('auftragForm').reset();
 }
 
 document.addEventListener('DOMContentLoaded', loadAuftraege);

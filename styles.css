@@ -75,3 +75,14 @@ li select {
     align-self: flex-end;
     margin-top: 5px;
 }
+
+@media print {
+    .auftrag-content {
+        border: 1px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    button {
+        display: none; /* Verstecke Buttons bei Druck */
+    }
+}

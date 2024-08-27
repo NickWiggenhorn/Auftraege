@@ -72,24 +72,41 @@ function addAuftragToList(auftrag, id) {
     listItem.setAttribute('data-id', id);
 
     listItem.innerHTML = `
-        <div><strong>Name:</strong> ${auftrag.name}</div>
-        <div><strong>Baustoff:</strong> ${auftrag.baustoff}</div>
-        <div><strong>LKW:</strong> ${auftrag.lkw}</div>
-        <div><strong>Adresse:</strong> ${auftrag.adresse}</div>
-        <div><strong>Lieferdatum:</strong> ${auftrag.lieferdatum}</div>
-        <div><strong>Kontaktinformationen:</strong> ${auftrag.kontakt}</div>
-        <div><strong>Besondere Anweisungen:</strong> ${auftrag.anweisungen}</div>
-        <div><strong>Status:</strong> ${auftrag.status}</div>
-        <button onclick="deleteAuftrag('${id}')">Löschen</button>
-        <select onchange="updateStatus('${id}', this.value)">
-            <option value="Eingegangen" ${auftrag.status === 'Eingegangen' ? 'selected' : ''}>Eingegangen</option>
-            <option value="In Bearbeitung" ${auftrag.status === 'In Bearbeitung' ? 'selected' : ''}>In Bearbeitung</option>
-            <option value="Abgeschlossen" ${auftrag.status === 'Abgeschlossen' ? 'selected' : ''}>Abgeschlossen</option>
-        </select>
+        <div class="auftrag-content" id="auftrag-${id}">
+            <div><strong>Name:</strong> ${auftrag.name}</div>
+            <div><strong>Baustoff:</strong> ${auftrag.baustoff}</div>
+            <div><strong>LKW:</strong> ${auftrag.lkw}</div>
+            <div><strong>Adresse:</strong> ${auftrag.adresse}</div>
+            <div><strong>Lieferdatum:</strong> ${auftrag.lieferdatum}</div>
+            <div><strong>Kontaktinformationen:</strong> ${auftrag.kontakt}</div>
+            <div><strong>Besondere Anweisungen:</strong> ${auftrag.anweisungen}</div>
+            <div><strong>Status:</strong> ${auftrag.status}</div>
+            <button onclick="deleteAuftrag('${id}')">Löschen</button>
+            <button onclick="printAuftrag('${id}')">Drucken</button>
+            <select onchange="updateStatus('${id}', this.value)">
+                <option value="Eingegangen" ${auftrag.status === 'Eingegangen' ? 'selected' : ''}>Eingegangen</option>
+                <option value="In Bearbeitung" ${auftrag.status === 'In Bearbeitung' ? 'selected' : ''}>In Bearbeitung</option>
+                <option value="Abgeschlossen" ${auftrag.status === 'Abgeschlossen' ? 'selected' : ''}>Abgeschlossen</option>
+            </select>
+        </div>
     `;
 
     auftraegeList.appendChild(listItem);
 }
+
+window.printAuftrag = function(id) {
+    const auftragContent = document.getElementById(`auftrag-${id}`).innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Druckvorschau</title>');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; margin: 20px; }</style>');
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(auftragContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+};
+
 
 function loadAuftraege() {
     const auftraegeRef = ref(db, 'auftraege');
